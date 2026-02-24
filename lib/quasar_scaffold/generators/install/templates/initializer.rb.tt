@@ -1,0 +1,39 @@
+QuasarScaffold.configure do |config|
+  # Required: the Rails module your API controllers live in
+  config.api_version_module = V1
+
+  # Required: list of CamelCase model-module names to scaffold
+  # Each entry gets dynamically generated response classes, serializer, and controller.
+  config.resource_modules = %w[
+    # Add your resources here, e.g.:
+    # Students
+    # Employees
+    # Families
+  ]
+
+  # The request header key that carries the JWT token
+  config.jwt_header_key = 'token'
+
+  # Decode the raw JWT string and return a hash
+  # config.jwt_decoder = ->(raw_token) {
+  #   JWT.decode(raw_token, ENV['JWT_SECRET'], true, algorithm: 'HS256')[0]
+  # }
+
+  # Resolve the current user from decoded JWT data
+  # config.current_user_resolver = ->(data) {
+  #   return if data.blank?
+  #   User.find_by(auth_token: data['auth_token'])
+  # }
+
+  # Validate that the current tenant is accessible (return true/false)
+  config.tenant_validator = -> { true }
+
+  # Return the default locale string when no user locale is set
+  # config.default_locale_resolver = -> { I18n.default_locale.to_s }
+
+  # Return the current time zone string
+  # config.time_zone_resolver = -> { 'UTC' }
+
+  # Return the current tenant name for logging (optional, e.g. for Apartment)
+  # config.current_tenant_resolver = -> { defined?(Apartment) ? Apartment::Tenant.current : 'default' }
+end
