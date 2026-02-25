@@ -5,7 +5,7 @@ require_relative 'lib/quasar_scaffold/version'
 Gem::Specification.new do |s|
   s.name        = 'quasar_scaffold'
   s.version     = QuasarScaffold::VERSION
-  s.authors     = ['Jason Surrett']
+  s.authors     = ['Jeff Surrett']
   s.email       = ['']
   s.summary     = 'Full-stack CRUD scaffold for Rails API + Quasar/Vue 3 applications'
   s.description = <<~DESC
@@ -22,7 +22,7 @@ Gem::Specification.new do |s|
     'frontend/**/*',
     'README.md',
     'LICENSE.txt'
-  ]
+  ].reject { |f| f.include?('node_modules') }
 
   s.required_ruby_version = '>= 3.2'
 

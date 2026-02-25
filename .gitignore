@@ -2,3 +2,4 @@
 .bundle
 Gemfile.lock
 .quasar_scaffold_frontend_path
+frontend/node_modules/
