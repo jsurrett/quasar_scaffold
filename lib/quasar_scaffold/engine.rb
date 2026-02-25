@@ -6,6 +6,10 @@ module QuasarScaffold
     # This is intentional — host app overrides like `class Students::EditResponse < ::EditResponse`
     # depend on gem classes being accessible at the top level.
 
+    initializer 'quasar_scaffold.route_drawing' do
+      ActionDispatch::Routing::Mapper.include(QuasarScaffold::RouteDrawing)
+    end
+
     initializer 'quasar_scaffold.eager_load_paths' do |app|
       app.config.eager_load_paths += Dir[
         Engine.root.join('app', 'quasar_scaffold', '**')

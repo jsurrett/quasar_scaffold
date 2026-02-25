@@ -1,6 +1,6 @@
 QuasarScaffold.configure do |config|
   # Required: the Rails module your API controllers live in
-  config.api_version_module = V1
+  config.api_version_module = 'V1'
 
   # Required: list of CamelCase model-module names to scaffold
   # Each entry gets dynamically generated response classes, serializer, and controller.

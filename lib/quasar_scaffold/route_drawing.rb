@@ -23,4 +23,3 @@ module QuasarScaffold
   end
 end
 
-ActionDispatch::Routing::Mapper.include(QuasarScaffold::RouteDrawing)

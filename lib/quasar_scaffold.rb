@@ -6,6 +6,21 @@ require 'quasar_scaffold/route_drawing'
 require 'quasar_scaffold/engine'
 
 module QuasarScaffold
+  # Names stored as strings — constants are not resolved at require time.
+  # They are constantized inside init(), which runs in to_prepare after all
+  # app code (including app/quasar_scaffold/) has been autoloaded.
+  MODEL_RESPONSE_CLASS_NAMES = %w[
+    IndexResponse
+    CreateResponse
+    EditResponse
+    UpdateResponse
+    BatchUpdateResponse
+    ShowResponse
+    ImportResponse
+    DestroyResponse
+    DatatableOptionsResponse
+  ].freeze
+
   class << self
     def configuration
       @configuration ||= Configuration.new
@@ -28,14 +43,18 @@ module QuasarScaffold
       api_mod = configuration.api_version_module
       raise ArgumentError, 'QuasarScaffold: configure must set api_version_module before init' if api_mod.nil?
 
+      # Accept either the module constant or its name as a string/symbol
+      api_mod = api_mod.to_s.constantize if api_mod.is_a?(String) || api_mod.is_a?(Symbol)
+
       configuration.resource_modules.each do |module_name|
         module_const = module_constant(module_name)
         module_classes = module_const.constants
 
-        MODEL_RESPONSE_CLASSES.each do |klass|
-          next if module_classes.include?(klass.to_s.to_sym)
+        MODEL_RESPONSE_CLASS_NAMES.each do |class_name|
+          next if module_classes.include?(class_name.to_sym)
 
-          module_const.const_set(klass.to_s, Class.new(klass))
+          base_klass = class_name.constantize
+          module_const.const_set(class_name, Class.new(base_klass))
         end
 
         unless module_classes.include?(:IndexSerializer)
@@ -58,16 +77,4 @@ module QuasarScaffold
       Object.const_set(module_name, Module.new)
     end
   end
-
-  MODEL_RESPONSE_CLASSES = [
-    IndexResponse,
-    CreateResponse,
-    EditResponse,
-    UpdateResponse,
-    BatchUpdateResponse,
-    ShowResponse,
-    ImportResponse,
-    DestroyResponse,
-    DatatableOptionsResponse,
-  ].freeze
 end
