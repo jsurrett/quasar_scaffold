@@ -83,7 +83,7 @@ export default {
     try {
       const headers = state.datatableOptions.groups[state.columnsGroup].reduce((acc, column) => {
         column = camelize(column)
-        if (state.belongsTo?.name !== column) {
+        if (!state.isNested || state.belongsTo?.name !== column) {
           const columnOptions = state.datatableOptions.columns[column] || {
             name: column,
             label: column,

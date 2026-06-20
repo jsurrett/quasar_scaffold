@@ -4,6 +4,7 @@ export default function defaultState ({ defaultRecord }) {
       id: null,
       name: null
     },
+    isNested: false,
     columnsGroup: 'default',
     datatableOptions: {
       modelName: null,

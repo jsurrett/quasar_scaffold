@@ -95,7 +95,7 @@ export default {
     onMounted(async () => {
       if (!resource.datatableOptions.modelName) {
         dataTableNeededIdNameMappings[props.resourceName] && await dataTableNeededIdNameMappings[props.resourceName]()
-        await resource.load({ pagination: resource.pagination, belongsTo: effectiveBelongsTo.value })
+        await resource.load({ pagination: resource.pagination, belongsTo: effectiveBelongsTo.value, isNested: !!props.belongsTo })
       }
     })
 

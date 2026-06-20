@@ -40,6 +40,7 @@ export default function defaultActions ({ endpoints, defaultRecord, resourceName
 
     async load (options = {}) {
       this.belongsTo = options.belongsTo || {}
+      this.isNested = options.isNested || false
 
       Promise.all([
         this.getDatatableOptions(),
