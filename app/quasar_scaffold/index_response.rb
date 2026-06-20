@@ -69,8 +69,6 @@ class IndexResponse
     @sort_key ||= pagination[:sort_by].underscore.gsub(/([a-z])(\d)/, '\1_\2').to_sym
   end
 
-  '5,214'.gsub(/(\d+)(,)(\d+)/, '\1.\3')
-
   def sort_by_method
     return unless model::SORT_FIELDS_BY_METHOD.key?(sort_key)
 

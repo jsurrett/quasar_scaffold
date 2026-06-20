@@ -13,7 +13,7 @@ class CreateResponse
 
   def execute
     @record = model.create!(permitted_attributes)
-  rescue StandardError => e
+  rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotSaved, ActiveRecord::StatementInvalid => e
     errors << e.message
   end
 

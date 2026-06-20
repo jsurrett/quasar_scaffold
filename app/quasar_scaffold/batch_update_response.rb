@@ -18,7 +18,7 @@ class BatchUpdateResponse
 
   def execute
     records.update(permitted_attributes)
-  rescue StandardError => e
+  rescue ActiveRecord::ActiveRecordError, ActiveRecord::StatementInvalid => e
     errors << e.message
   end
 

@@ -90,7 +90,7 @@ class BaseModelController < ApplicationController
   def render_error(error)
     render(
       json: { errors: [error.message] },
-      status:,
+      status: :unprocessable_entity,
       content_type: 'application/json',
     )
   end

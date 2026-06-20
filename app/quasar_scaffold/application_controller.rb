@@ -1,10 +1,10 @@
 class ApplicationController < ActionController::API
   include ActionController::MimeResponds
 
-  class UnathorizedAccess < StandardError; end
+  class UnauthorizedAccess < StandardError; end
 
   rescue_from CanCan::AccessDenied, with: :unauthorized_access
-  rescue_from UnathorizedAccess, with: :unauthorized_access
+  rescue_from UnauthorizedAccess, with: :unauthorized_access
 
   extend Memoist
 
@@ -17,7 +17,7 @@ class ApplicationController < ActionController::API
 
   def authenticate
     tenant_valid = QuasarScaffold.configuration.tenant_validator.call
-    raise UnathorizedAccess if !tenant_valid || jwt_token_data.blank? || current_user.blank?
+    raise UnauthorizedAccess if !tenant_valid || jwt_token_data.blank? || current_user.blank?
   end
 
   def current_user
@@ -37,7 +37,7 @@ class ApplicationController < ActionController::API
     return {} if decoder.nil?
 
     decoder.call(request.headers[header_key])
-  rescue StandardError
+  rescue JWT::DecodeError, JWT::VerificationError, JWT::ExpiredSignature
     {}
   end
   memoize :jwt_token_data
@@ -61,7 +61,7 @@ class ApplicationController < ActionController::API
         params[:locale] || QuasarScaffold.configuration.default_locale_resolver.call
       end
     I18n.locale = locale
-  rescue StandardError
+  rescue I18n::InvalidLocale, ArgumentError
     I18n.locale = QuasarScaffold.configuration.default_locale_resolver.call
   end
 
