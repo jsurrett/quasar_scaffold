@@ -66,7 +66,8 @@
 </template>
 
 <script>
-import { onMounted } from 'vue'
+import { onMounted, computed } from 'vue'
+import { useRoute } from 'vue-router'
 import resourceStores from 'quasar-scaffold-host/stores/resourceStores'
 import ResourcesToolbar from './Toolbar/ResourcesToolbar.vue'
 import Search from './Search.vue'
@@ -83,12 +84,18 @@ export default {
     gridSlotComponent: Object
   },
   setup (props) {
+    const route = useRoute()
     const resource = resourceStores[props.resourceName]()
+
+    const effectiveBelongsTo = computed(() => {
+      if (props.belongsTo) return props.belongsTo
+      return route.query.belongsTo ? JSON.parse(route.query.belongsTo) : undefined
+    })
 
     onMounted(async () => {
       if (!resource.datatableOptions.modelName) {
         dataTableNeededIdNameMappings[props.resourceName] && await dataTableNeededIdNameMappings[props.resourceName]()
-        await resource.load({ pagination: resource.pagination, belongsTo: props.belongsTo })
+        await resource.load({ pagination: resource.pagination, belongsTo: effectiveBelongsTo.value })
       }
     })
 
