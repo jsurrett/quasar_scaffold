@@ -93,9 +93,7 @@ export default {
       return route.query.belongsTo ? JSON.parse(route.query.belongsTo) : undefined
     })
 
-    const effectiveIsNested = computed(() =>
-      props.isNested !== undefined ? props.isNested : !!props.belongsTo
-    )
+    const effectiveIsNested = computed(() => props.isNested || !!props.belongsTo)
 
     onMounted(async () => {
       if (!resource.datatableOptions.modelName) {
