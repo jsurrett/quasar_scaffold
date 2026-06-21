@@ -81,6 +81,7 @@ export default {
   props: {
     resourceName: String,
     belongsTo: Object,
+    isNested: Boolean,
     gridSlotComponent: Object
   },
   setup (props) {
@@ -92,10 +93,14 @@ export default {
       return route.query.belongsTo ? JSON.parse(route.query.belongsTo) : undefined
     })
 
+    const effectiveIsNested = computed(() =>
+      props.isNested !== undefined ? props.isNested : !!props.belongsTo
+    )
+
     onMounted(async () => {
       if (!resource.datatableOptions.modelName) {
         dataTableNeededIdNameMappings[props.resourceName] && await dataTableNeededIdNameMappings[props.resourceName]()
-        await resource.load({ pagination: resource.pagination, belongsTo: effectiveBelongsTo.value, isNested: !!props.belongsTo })
+        await resource.load({ pagination: resource.pagination, belongsTo: effectiveBelongsTo.value, isNested: effectiveIsNested.value })
       }
     })
 
