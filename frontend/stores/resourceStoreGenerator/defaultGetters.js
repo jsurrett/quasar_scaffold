@@ -2,6 +2,13 @@ import camelize from 'camelize'
 import { t } from 'quasar-scaffold-host/boot/i18n'
 import { compactObject } from 'quasar-scaffold/utils/index'
 
+function singularize (name) {
+  if (!name) return name
+  if (name.endsWith('ies')) return name.slice(0, -3) + 'y'
+  if (name.endsWith('s')) return name.slice(0, -1)
+  return name
+}
+
 export default {
   modelName (state) {
     return state.datatableOptions.modelName
@@ -83,7 +90,7 @@ export default {
     try {
       const headers = state.datatableOptions.groups[state.columnsGroup].reduce((acc, column) => {
         column = camelize(column)
-        if (!state.isNested || state.belongsTo?.name !== column) {
+        if (!state.isNested || singularize(state.belongsTo?.name) !== column) {
           const columnOptions = state.datatableOptions.columns[column] || {
             name: column,
             label: column,
