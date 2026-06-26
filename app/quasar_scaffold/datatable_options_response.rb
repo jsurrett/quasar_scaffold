@@ -79,7 +79,7 @@ class DatatableOptionsResponse
   end
 
   def belongs_to_filter(association, label_method: :name, lazy: nil)
-    filter_name = I18n.t("activerecord.attributes.#{model.name.underscore}.#{association}_id")
+    filter_name = I18n.t("activerecord.attributes.#{model.name.underscore}.#{association}")
     klass = model.reflect_on_association(association).klass
     use_lazy = lazy.nil? ? exceeds_lazy_threshold?(klass) : lazy
 
