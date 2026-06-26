@@ -21,8 +21,7 @@
       </template>
       <template v-slot:top>
         <resources-toolbar :resourceName="resourceName" />
-        <search :resourceName="resourceName"></search>
-        <filters :resourceName="resourceName" v-if="resource.showFiltersSection"></filters>
+        <filters :resourceName="resourceName"></filters>
         <active-filter-summary :resourceName="resourceName"></active-filter-summary>
       </template>
 
@@ -71,7 +70,6 @@ import { onMounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import resourceStores from 'quasar-scaffold-host/stores/resourceStores'
 import ResourcesToolbar from './Toolbar/ResourcesToolbar.vue'
-import Search from './Search.vue'
 import Filters from './Filters.vue'
 import ActiveFilterSummary from './ActiveFilterSummary.vue'
 import RowActions from 'quasar-scaffold/components/ResourceDataTable/RowActions.vue'
@@ -79,7 +77,7 @@ import GridSlot from './GridSlot.vue'
 import dataTableNeededIdNameMappings from 'quasar-scaffold-host/resourceHelpers/dataTableNeededIdNameMappings'
 
 export default {
-  components: { ResourcesToolbar, Search, Filters, ActiveFilterSummary, RowActions, GridSlot },
+  components: { ResourcesToolbar, Filters, ActiveFilterSummary, RowActions, GridSlot },
   props: {
     resourceName: String,
     belongsTo: Object,

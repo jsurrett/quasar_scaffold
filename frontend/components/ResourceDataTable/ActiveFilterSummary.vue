@@ -1,8 +1,20 @@
 <template>
-  <div v-if="activeKeys.length > 0" class="active-filter-summary full-width row items-center q-py-xs q-gutter-xs">
+  <div v-if="hasActiveItems" class="active-filter-summary full-width row items-center q-py-xs q-gutter-xs">
     <span class="text-caption text-grey-7 q-mr-xs">{{ $t('datatable.activeFilters') }}:</span>
     <q-chip
-      v-for="key in activeKeys"
+      v-if="resource.search"
+      removable
+      dense
+      size="sm"
+      color="secondary"
+      text-color="white"
+      icon="mdi-magnify"
+      @remove="resource.search = ''"
+    >
+      {{ resource.search }}
+    </q-chip>
+    <q-chip
+      v-for="key in activeFilterKeys"
       :key="key"
       removable
       dense
@@ -28,10 +40,14 @@ export default {
   setup (props) {
     const resource = resourceStores[props.resourceName]()
 
-    const activeKeys = computed(() =>
+    const activeFilterKeys = computed(() =>
       Object.keys(resource.selectedFilters).filter(key =>
         (resource.selectedFilters[key] || []).length > 0
       )
+    )
+
+    const hasActiveItems = computed(() =>
+      !!resource.search || activeFilterKeys.value.length > 0
     )
 
     function summaryLabel (key) {
@@ -52,12 +68,13 @@ export default {
     }
 
     function clearAll () {
+      resource.search = ''
       Object.keys(resource.selectedFilters).forEach(key => {
         resource.selectedFilters[key] = null
       })
     }
 
-    return { resource, activeKeys, summaryLabel, clearFilter, clearAll }
+    return { resource, activeFilterKeys, hasActiveItems, summaryLabel, clearFilter, clearAll }
   },
 }
 </script>

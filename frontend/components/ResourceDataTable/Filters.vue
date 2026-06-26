@@ -1,49 +1,65 @@
 <template>
   <div class="filter-panel full-width q-pa-sm q-mt-xs row q-gutter-sm">
-    <template v-for="key in resource.filterKeys" :key="key">
-      <lazy-filter-select
-        v-if="resource.datatableOptions.filters[key].resource"
-        class="filter-select"
-        :filter="resource.datatableOptions.filters[key]"
-        v-model="resource.selectedFilters[key]"
-      />
-      <q-select
-        v-else
-        class="filter-select"
-        filled
-        dense
-        clearable
-        multiple
-        emit-value
-        map-options
-        :options="resource.datatableOptions.filters[key].options"
-        :label="resource.datatableOptions.filters[key].name"
-        v-model="resource.selectedFilters[key]"
-      >
-        <template v-slot:selected>
-          <template v-if="(resource.selectedFilters[key] || []).length > 0">
-            <q-chip
-              v-for="(val, i) in (resource.selectedFilters[key] || []).slice(0, 2)"
-              :key="i"
-              removable
-              dense
-              size="sm"
-              @remove="removeValue(key, val)"
-            >
-              {{ getOptionLabel(key, val) }}
-            </q-chip>
-            <q-chip
-              v-if="(resource.selectedFilters[key] || []).length > 2"
-              dense
-              size="sm"
-              color="grey-5"
-              text-color="white"
-            >
-              +{{ (resource.selectedFilters[key] || []).length - 2 }}
-            </q-chip>
+    <q-input
+      class="filter-search"
+      filled
+      dense
+      clearable
+      debounce="500"
+      v-model="resource.search"
+      :placeholder="$t('datatable.search')"
+    >
+      <template v-slot:prepend>
+        <q-icon name="mdi-magnify" />
+      </template>
+    </q-input>
+
+    <template v-if="resource.showFiltersSection">
+      <template v-for="key in resource.filterKeys" :key="key">
+        <lazy-filter-select
+          v-if="resource.datatableOptions.filters[key].resource"
+          class="filter-select"
+          :filter="resource.datatableOptions.filters[key]"
+          v-model="resource.selectedFilters[key]"
+        />
+        <q-select
+          v-else
+          class="filter-select"
+          filled
+          dense
+          clearable
+          multiple
+          emit-value
+          map-options
+          :options="resource.datatableOptions.filters[key].options"
+          :label="resource.datatableOptions.filters[key].name"
+          v-model="resource.selectedFilters[key]"
+        >
+          <template v-slot:selected>
+            <template v-if="(resource.selectedFilters[key] || []).length > 0">
+              <q-chip
+                v-for="(val, i) in (resource.selectedFilters[key] || []).slice(0, 2)"
+                :key="i"
+                removable
+                dense
+                size="sm"
+                @remove="removeValue(key, val)"
+              >
+                {{ getOptionLabel(key, val) }}
+              </q-chip>
+              <q-chip
+                v-if="(resource.selectedFilters[key] || []).length > 2"
+                dense
+                size="sm"
+                color="grey-5"
+                text-color="white"
+              >
+                +{{ (resource.selectedFilters[key] || []).length - 2 }}
+              </q-chip>
+            </template>
           </template>
-        </template>
-      </q-select>
+        </q-select>
+      </template>
     </template>
   </div>
 </template>
@@ -78,6 +94,10 @@ export default {
 .filter-panel {
   background: #f0f4f8;
   border-radius: 8px;
+}
+.filter-search {
+  min-width: 200px;
+  flex: 2 1 200px;
 }
 .filter-select {
   min-width: 200px;
