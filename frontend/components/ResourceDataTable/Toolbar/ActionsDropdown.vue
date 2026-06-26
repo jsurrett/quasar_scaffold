@@ -1,6 +1,6 @@
 <template>
   <q-btn-dropdown
-    color="red"
+    color="secondary"
     size="sm"
     :label="$q.screen.gt.sm ? $t('datatable.actions') : void 0"
     icon="mdi-cogs"

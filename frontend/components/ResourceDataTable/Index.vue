@@ -11,6 +11,7 @@
       :loading="resource.loading"
       :filter="resource.tableFilter"
       @request="resource.fetch"
+      @row-click="onRowClick"
       binary-state-sort
       selection="multiple"
       v-model:selected="resource.selected"
@@ -56,6 +57,13 @@
         v-slot:[columnSlotName(columnName)]="props"
       >
         <q-td :props="props" v-html="sanitize(props.row[columnName])" />
+      </template>
+
+      <template v-slot:no-data>
+        <div class="full-width text-center q-py-lg text-grey-6">
+          <q-icon name="mdi-database-off-outline" size="3em" class="q-mb-sm block" />
+          <div>{{ resource.activeFilterCount > 0 || resource.search ? $t('datatable.noDataFiltered') : $t('datatable.noData') }}</div>
+        </div>
       </template>
 
       <template v-for="(_, name) in $slots" #[name]="slotData">
@@ -127,12 +135,20 @@ export default {
 
     const columnSlotName = (columnName) => `body-cell-${columnName}`
     const sanitize = (html) => DOMPurify.sanitize(html)
+    const onRowClick = (_, row) => router.push({ path: `${route.path}/${row.id}` })
 
     return {
       resource,
       columnSlotName,
       sanitize,
+      onRowClick,
     }
   }
 }
 </script>
+
+<style scoped>
+.q-table tbody tr {
+  cursor: pointer;
+}
+</style>

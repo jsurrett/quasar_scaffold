@@ -3,7 +3,7 @@
     v-if="resource.showFiltersButton"
     size="sm"
     @click="handleToggleFilters"
-    color='success'
+    color="secondary"
     icon="mdi-filter"
     :label="$q.screen.gt.sm ? $t('datatable.filters') : void 0"
     :icon-right="resource.showFiltersSection ? 'mdi-eye-minus' : 'mdi-eye'"

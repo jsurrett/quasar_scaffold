@@ -1,11 +1,11 @@
 <template>
   <q-input
     :label="$t('datatable.search')"
+    clearable
     dense
     debounce="500"
     color="primary"
     v-model="resource.search"
-    :placeholder="$t('datatable.search')"
   >
     <template v-slot:append>
       <q-icon name="mdi-magnify" />

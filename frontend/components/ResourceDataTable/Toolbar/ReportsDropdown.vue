@@ -1,7 +1,7 @@
 <template>
   <q-btn
     v-if="(resource.indexReportList || []).length  > 0"
-    color="green"
+    color="secondary"
     size="sm"
     :label="$q.screen.gt.sm ? $t('datatable.reports') : void 0"
     icon="mdi-file-document"
