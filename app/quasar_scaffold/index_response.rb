@@ -30,9 +30,9 @@ class IndexResponse
   end
 
   def ordered_records
-    return filtered_records if pagination[:sort_by].blank?
+    return sort_by_method || filtered_records.unscope(:order).order(order_options) if pagination[:sort_by].present?
 
-    sort_by_method || filtered_records.unscope(:order).order(order_options)
+    model.respond_to?(:default_order) ? filtered_records.default_order : filtered_records
   end
   memoize :ordered_records
 
