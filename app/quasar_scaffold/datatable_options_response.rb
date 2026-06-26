@@ -107,7 +107,8 @@ class DatatableOptionsResponse
 
   def cached_filter_options(klass, label_method)
     Rails.cache.fetch("quasar_scaffold/filter_options/#{klass.table_name}/#{label_method}", expires_in: 1.day) {
-      klass.all.map { |record| { value: record.id, label: record.send(label_method) } }
+      records = klass.respond_to?(:default_order) ? klass.default_order : klass.all
+    records.map { |record| { value: record.id, label: record.send(label_method) } }
     }
   end
 
