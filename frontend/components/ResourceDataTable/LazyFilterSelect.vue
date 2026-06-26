@@ -1,10 +1,10 @@
 <template>
   <q-select
-    class="filter-selects"
+    class="filter-select"
     filled
+    dense
     clearable
     multiple
-    use-chips
     use-input
     emit-value
     map-options
@@ -15,6 +15,29 @@
     @update:model-value="$emit('update:modelValue', $event)"
     @filter="filterFn"
   >
+    <template v-slot:selected>
+      <template v-if="(modelValue || []).length > 0">
+        <q-chip
+          v-for="(val, i) in (modelValue || []).slice(0, 2)"
+          :key="i"
+          removable
+          dense
+          size="sm"
+          @remove="removeValue(val)"
+        >
+          {{ getChipLabel(val) }}
+        </q-chip>
+        <q-chip
+          v-if="(modelValue || []).length > 2"
+          dense
+          size="sm"
+          color="grey-5"
+          text-color="white"
+        >
+          +{{ (modelValue || []).length - 2 }}
+        </q-chip>
+      </template>
+    </template>
     <template v-slot:no-option>
       <q-item>
         <q-item-section class="text-grey">No results</q-item-section>
@@ -35,12 +58,22 @@ export default {
     modelValue: Array,
   },
   emits: ['update:modelValue'],
-  setup (props) {
+  setup (props, { emit }) {
     const selectOptions = ref([])
     const paginationParams = { ...pagination, sortBy: props.filter.labelField }
 
+    function getChipLabel (value) {
+      return selectOptions.value.find(o => o.value === value)?.label ?? `#${value}`
+    }
+
+    function removeValue (value) {
+      emit('update:modelValue', (props.modelValue || []).filter(v => v !== value))
+    }
+
     return {
       selectOptions,
+      getChipLabel,
+      removeValue,
       filterFn (val, update) {
         update(async () => {
           const search = (val || '').toLocaleLowerCase()
