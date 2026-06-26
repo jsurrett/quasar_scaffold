@@ -15,7 +15,7 @@
           :key="index"
           @click="action.action({ resource, router, item })"
           clickable
-          :disable="!!item.permission && cannot({ action: item.permission, modelName, id: item.id })"
+          :disable="!!action.permission && cannot({ action: action.permission, modelName, id: item.id })"
           v-close-popup
           :data-testid="`row-action-${action.title}-for-${item.id}`"
         >

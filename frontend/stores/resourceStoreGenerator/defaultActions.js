@@ -42,7 +42,7 @@ export default function defaultActions ({ endpoints, defaultRecord, resourceName
       this.belongsTo = options.belongsTo || {}
       this.isNested = options.isNested || false
 
-      Promise.all([
+      await Promise.all([
         this.getDatatableOptions(),
         this.fetch(options)
       ])
@@ -99,7 +99,7 @@ export default function defaultActions ({ endpoints, defaultRecord, resourceName
 
     show: withLoading(async function (id) {
       if (Object.keys(this.datatableOptions.columns).length === 0) {
-        await this.getDatatableOptions
+        await this.getDatatableOptions()
       }
 
       if (id) {
@@ -134,8 +134,9 @@ export default function defaultActions ({ endpoints, defaultRecord, resourceName
       await endpoints.destroy(id)
       if (updaterCallback) { await updaterCallback() }
 
+      const ids = Array.isArray(id) ? id : [id]
       this.records = Object.fromEntries(
-        Object.entries(this.records).filter(([key]) => key !== `id${id}`)
+        Object.entries(this.records).filter(([key]) => !ids.some(i => key === `id${i}`))
       )
     }),
 
