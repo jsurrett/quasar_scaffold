@@ -32,7 +32,7 @@ import resourceStores from 'quasar-scaffold-host/stores/resourceStores'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { defaultTableActions } from './actionsHelper'
-import actions from 'quasar-scaffold-host/resourceHelpers/actions'
+import actions, { excludeActions } from 'quasar-scaffold-host/resourceHelpers/actions'
 import { cannot } from 'quasar-scaffold-host/utils/authorizer'
 
 import { useQuasar } from 'quasar'
@@ -62,7 +62,11 @@ export default {
       resource,
       cannot,
       handleMacro,
-      actionsList: (actions[props.resourceName] || defaultTableActions)
+      actionsList: (() => {
+        const excluded = excludeActions?.[props.resourceName] || []
+        const base = defaultTableActions.filter(a => !excluded.includes(a.name))
+        return [...base, ...(actions[props.resourceName] || [])]
+      })()
     }
   }
 }

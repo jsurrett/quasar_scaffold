@@ -129,6 +129,8 @@ class DatatableOptionsResponse
 
   def belongs_to_filters
     model.reflect_on_all_associations(:belongs_to).each_with_object({}) do |reflection, hash|
+      next if reflection.polymorphic?
+
       hash[:"#{reflection.name}_id"] = belongs_to_filter(reflection.name)
     end
   end
@@ -152,9 +154,7 @@ class DatatableOptionsResponse
   end
 
   def html_columns
-    model.columns.select { |column| column.type == :text }.map { |column|
-      column.name.camelcase(:lower)
-    }
+    []
   end
 
   def boolean_columns

@@ -4,7 +4,8 @@
   "dependencies": {
     "camelize": "^1.0.0",
     "lodash": "^4.17.21",
-    "snakeize": "^0.1.0"
+    "snakeize": "^0.1.0",
+    "dompurify": ">=3.0"
   },
   "peerDependencies": {
     "axios": ">=0.21",

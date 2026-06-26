@@ -30,8 +30,3 @@ export default {
 }
 </script>
 
-<style scoped>
-  #datatable-search {
-    margin: 0px 15px;
-  }
-</style>

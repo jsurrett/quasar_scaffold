@@ -4,7 +4,7 @@ function handleSelectedUpdate ({ route, router }) {
   router.push(`${route.path}/batch`)
 }
 
-function handleSelectedDestroy ({ resource }) {
+export function handleSelectedDestroy ({ resource }) {
   const selectedIds = resource.selectedIds
 
   confirm(
@@ -22,14 +22,13 @@ function handleExport ({ resource }) {
 //   router.push({ path: `${route.fullPath}/import` })
 // }
 
-function gotoNew ({ route, router }) {
+export function gotoNew ({ route, router }) {
   router.push({ path: `${route.path}/new` })
 }
 
 export const defaultTableActions = [
-  { icon: 'plus-circle', title: 'datatable.createNew', action: gotoNew, areIdsOptional: true, permission: 'create' },
-  { icon: 'pencil', title: 'datatable.batchUpdate', action: handleSelectedUpdate, permission: 'update' },
-  { icon: 'delete', title: 'datatable.batchDestroy', action: handleSelectedDestroy, permission: 'destroy' },
-  // { icon: 'import', title: 'datatable.import', action: handleImport, areIdsOptional: true, permission: 'create' },
-  { icon: 'export', title: 'datatable.export', action: handleExport, areIdsOptional: true },
+  { name: 'createNew',    icon: 'plus-circle', title: 'datatable.createNew',    action: gotoNew,               areIdsOptional: true, permission: 'create'  },
+  { name: 'batchUpdate',  icon: 'pencil',      title: 'datatable.batchUpdate',  action: handleSelectedUpdate,                        permission: 'update'  },
+  { name: 'batchDestroy', icon: 'delete',      title: 'datatable.batchDestroy', action: handleSelectedDestroy,                       permission: 'destroy' },
+  { name: 'export',       icon: 'export',      title: 'datatable.export',       action: handleExport,          areIdsOptional: true                        },
 ]

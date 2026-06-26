@@ -55,7 +55,7 @@
         :key="columnName"
         v-slot:[columnSlotName(columnName)]="props"
       >
-        <q-td :props="props" v-html="props.row[columnName]" />
+        <q-td :props="props" v-html="sanitize(props.row[columnName])" />
       </template>
 
       <template v-for="(_, name) in $slots" #[name]="slotData">
@@ -66,9 +66,12 @@
 </template>
 
 <script>
-import { onMounted, computed } from 'vue'
-import { useRoute } from 'vue-router'
+import { onMounted, onUnmounted, computed } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import DOMPurify from 'dompurify'
 import resourceStores from 'quasar-scaffold-host/stores/resourceStores'
+import { excludeActions } from 'quasar-scaffold-host/resourceHelpers/actions'
+import { gotoNew } from './Toolbar/actionsHelper'
 import ResourcesToolbar from './Toolbar/ResourcesToolbar.vue'
 import Filters from './Filters.vue'
 import ActiveFilterSummary from './ActiveFilterSummary.vue'
@@ -82,32 +85,53 @@ export default {
     resourceName: String,
     belongsTo: Object,
     isNested: Boolean,
-    gridSlotComponent: Object
   },
   setup (props) {
     const route = useRoute()
+    const router = useRouter()
     const resource = resourceStores[props.resourceName]()
 
     const effectiveBelongsTo = computed(() => {
       if (props.belongsTo) return props.belongsTo
-      return route.query.belongsTo ? JSON.parse(route.query.belongsTo) : undefined
+      if (!route.query.belongsTo) return undefined
+      try {
+        return JSON.parse(route.query.belongsTo)
+      } catch {
+        return undefined
+      }
     })
 
     const effectiveIsNested = computed(() => props.isNested || !!props.belongsTo)
+
+    const excluded = excludeActions?.[props.resourceName] || []
+
+    function onKeydown (e) {
+      if (e.key !== 'n') return
+      if (excluded.includes('createNew')) return
+      const tag = document.activeElement?.tagName
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return
+      gotoNew({ route, router })
+    }
 
     onMounted(async () => {
       if (!resource.datatableOptions.modelName) {
         dataTableNeededIdNameMappings[props.resourceName] && await dataTableNeededIdNameMappings[props.resourceName]()
         await resource.load({ pagination: resource.pagination, belongsTo: effectiveBelongsTo.value, isNested: effectiveIsNested.value })
       }
+      document.addEventListener('keydown', onKeydown)
+    })
+
+    onUnmounted(() => {
+      document.removeEventListener('keydown', onKeydown)
     })
 
     const columnSlotName = (columnName) => `body-cell-${columnName}`
+    const sanitize = (html) => DOMPurify.sanitize(html)
 
     return {
       resource,
       columnSlotName,
-      GridSlotComponent: props.gridSlotComponent || GridSlot
+      sanitize,
     }
   }
 }
