@@ -18,6 +18,7 @@ module QuasarScaffold
 
     # Dynamically create controllers and response classes after all app code is loaded
     config.to_prepare do
+      ActiveRecord::Base.include(ClearsFilterCache)
       QuasarScaffold.init
     end
   end
