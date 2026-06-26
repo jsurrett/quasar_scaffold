@@ -1,24 +1,32 @@
 <template>
-  <q-select
-    class="filter-selects"
-    v-for="(key, index) in resource.filterKeys"
-    :key="index"
-    filled
-    clearable
-    multiple
-    use-chips
-    emit-value
-    map-options
-    :options="resource.datatableOptions.filters[key].options"
-    :label="resource.datatableOptions.filters[key].name"
-    v-model="resource.selectedFilters[key]"
-  />
+  <template v-for="(key, index) in resource.filterKeys" :key="index">
+    <lazy-filter-select
+      v-if="resource.datatableOptions.filters[key].resource"
+      :filter="resource.datatableOptions.filters[key]"
+      v-model="resource.selectedFilters[key]"
+    />
+    <q-select
+      v-else
+      class="filter-selects"
+      filled
+      clearable
+      multiple
+      use-chips
+      emit-value
+      map-options
+      :options="resource.datatableOptions.filters[key].options"
+      :label="resource.datatableOptions.filters[key].name"
+      v-model="resource.selectedFilters[key]"
+    />
+  </template>
 </template>
 
 <script>
+import LazyFilterSelect from './LazyFilterSelect.vue'
 import resourceStores from 'quasar-scaffold-host/stores/resourceStores'
 
 export default {
+  components: { LazyFilterSelect },
   props: {
     resourceName: String,
   },

@@ -5,6 +5,7 @@ class DatatableOptionsResponse
   TIMESTAMP_FIELDS = %i[created_at updated_at].freeze
   NON_DEFAULT_COLUMNS = (%i[id] + TIMESTAMP_FIELDS).freeze
   EXCLUDED_COLUMNS = [].freeze
+  LAZY_FILTER_THRESHOLD = 50
 
   def initialize(ability:, user:)
     @ability = ability
@@ -77,8 +78,64 @@ class DatatableOptionsResponse
     enum_options.merge(other_select_options)
   end
 
+  def belongs_to_filter(association, label_method: :name, lazy: nil)
+    filter_name = I18n.t("activerecord.attributes.#{model.name.underscore}.#{association}_id")
+    klass = model.reflect_on_association(association).klass
+    use_lazy = lazy.nil? ? exceeds_lazy_threshold?(klass) : lazy
+
+    if use_lazy
+      {
+        name: filter_name,
+        resource: association.to_s.pluralize.camelcase(:lower),
+        labelField: label_method.to_s.camelcase(:lower),
+        valueField: 'id',
+      }
+    else
+      {
+        name: filter_name,
+        options: cached_filter_options(klass, label_method),
+      }
+    end
+  end
+
+  def exceeds_lazy_threshold?(klass)
+    count = Rails.cache.fetch("quasar_scaffold/filter_count/#{klass.table_name}", expires_in: 1.day) {
+      klass.count
+    }
+    count > self.class::LAZY_FILTER_THRESHOLD
+  end
+
+  def cached_filter_options(klass, label_method)
+    Rails.cache.fetch("quasar_scaffold/filter_options/#{klass.table_name}/#{label_method}", expires_in: 1.day) {
+      klass.all.map { |record| { value: record.id, label: record.send(label_method) } }
+    }
+  end
+
+  def enum_filter(field)
+    {
+      name: I18n.t("activerecord.attributes.#{model.name.underscore}.#{field}"),
+      options: model.send(field.to_s.pluralize).map { |key, value|
+        { value: value, label: I18n.t("enums.#{key}") }
+      },
+    }
+  end
+
+  def enum_filters
+    model.defined_enums.keys.each_with_object({}) do |field, hash|
+      hash[field.to_sym] = enum_filter(field)
+    end
+  end
+
+  def belongs_to_filters
+    model.reflect_on_all_associations(:belongs_to).each_with_object({}) do |reflection, hash|
+      hash[:"#{reflection.name}_id"] = belongs_to_filter(reflection.name)
+    end
+  end
+
   def filters
-    {}
+    enum_filters.merge(belongs_to_filters).filter { |_key, value|
+      value[:resource].present? || value[:options]&.any?
+    }
   end
 
   def success_hash
