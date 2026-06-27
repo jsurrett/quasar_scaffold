@@ -34,7 +34,7 @@ const pagination = {
   sortBy: null,
   descending: false,
   page: 1,
-  rowsPerPage: 20,
+  rowsPerPage: 10,
   rowsNumber: null,
 }
 

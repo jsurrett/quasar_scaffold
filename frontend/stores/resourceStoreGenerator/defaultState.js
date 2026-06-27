@@ -18,7 +18,7 @@ export default function defaultState ({ defaultRecord }) {
       sortBy: null,
       descending: false,
       page: 1,
-      rowsPerPage: 20,
+      rowsPerPage: 10,
       rowsNumber: null,
     },
     loading: true,

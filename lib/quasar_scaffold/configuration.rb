@@ -36,7 +36,7 @@ module QuasarScaffold
     # Default: -> { 'default' }
     attr_accessor :current_tenant_resolver
 
-    # Default items per page for pagination. Default: 20
+    # Default items per page for pagination. Default: 10
     attr_accessor :default_items_per_page
 
     def initialize
@@ -48,7 +48,7 @@ module QuasarScaffold
       @default_locale_resolver  = -> { I18n.default_locale.to_s }
       @time_zone_resolver       = -> { 'UTC' }
       @current_tenant_resolver  = -> { 'default' }
-      @default_items_per_page   = 20
+      @default_items_per_page   = 10
     end
   end
 end

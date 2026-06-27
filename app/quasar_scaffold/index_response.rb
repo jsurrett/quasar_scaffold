@@ -15,7 +15,7 @@ class IndexResponse
     sort_by: nil,
     descending: false,
     page: 1,
-    rows_per_page: 20,
+    rows_per_page: 10,
     rows_number: nil,
   }.freeze
 

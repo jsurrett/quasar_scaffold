@@ -50,7 +50,7 @@
 import { ref } from 'vue'
 import basicTableApi from 'quasar-scaffold-host/api/dataTables'
 
-const pagination = { sortBy: null, descending: false, page: 1, rowsPerPage: 20, rowsNumber: null }
+const pagination = { sortBy: null, descending: false, page: 1, rowsPerPage: 10, rowsNumber: null }
 
 export default {
   props: {
