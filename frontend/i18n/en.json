@@ -1,0 +1,40 @@
+{
+  "actions": {
+    "cancel": "Cancel",
+    "save": "Save",
+    "new": "New",
+    "edit": "Edit",
+    "batchEdit": "Batch Edit"
+  },
+  "datatable": {
+    "actions": "Actions",
+    "activeFilters": "Active",
+    "batchDestroy": "Destroy",
+    "batchEdit": "Edit Records",
+    "batchUpdate": "Update",
+    "clearAll": "Clear all",
+    "createNew": "Create New",
+    "deleteRecord": "Delete Record",
+    "editRecord": "Edit Record",
+    "export": "Export",
+    "filters": "Filters",
+    "import": "Import",
+    "newRecord": "New Record",
+    "noData": "No records found.",
+    "noDataFiltered": "No records match the current filters.",
+    "recordsSelected": "%{count} selected records",
+    "reports": "Reports",
+    "search": "Search",
+    "viewRecord": "Record",
+    "views": {
+      "button": "Views"
+    }
+  },
+  "messages": {
+    "confirmMultipleDelete": "Are you sure you want to delete these %{count} records?",
+    "confirmSingleDelete": "Are you sure you want to delete this record?",
+    "noRecordsSelected": "No records were selected.",
+    "recordsImported": "Records were imported.",
+    "unauthorizedAccessAttemptDetected": "Unauthorized access attempt detected"
+  }
+}

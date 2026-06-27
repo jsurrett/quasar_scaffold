@@ -1,0 +1,40 @@
+{
+  "actions": {
+    "cancel": "Cancelar",
+    "save": "Guardar",
+    "new": "Nuevo",
+    "edit": "Editar",
+    "batchEdit": "Editar Multiple"
+  },
+  "datatable": {
+    "actions": "Acciones",
+    "activeFilters": "Activo",
+    "batchDestroy": "Destruir",
+    "batchEdit": "Editar registros",
+    "batchUpdate": "Actualizar",
+    "clearAll": "Borrar todo",
+    "createNew": "Crear Nuevo",
+    "deleteRecord": "Eliminar registro",
+    "editRecord": "Editar registro",
+    "export": "Exportar",
+    "filters": "Filtros",
+    "import": "Importar",
+    "newRecord": "Nuevo registro",
+    "noData": "No se encontraron registros.",
+    "noDataFiltered": "Ningún registro coincide con los filtros actuales.",
+    "recordsSelected": "%{count} registros seleccionados",
+    "reports": "Reportes",
+    "search": "Buscar",
+    "viewRecord": "Registro",
+    "views": {
+      "button": "Vistas"
+    }
+  },
+  "messages": {
+    "confirmMultipleDelete": "¿Está seguro de que desea eliminar estos %{count} registros?",
+    "confirmSingleDelete": "¿Está seguro de que desea eliminar este registro?",
+    "noRecordsSelected": "Ningún registro fue seleccionado.",
+    "recordsImported": "Registros fueron importados.",
+    "unauthorizedAccessAttemptDetected": "Intento de acceso no autorizado detectado"
+  }
+}
