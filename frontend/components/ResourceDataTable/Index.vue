@@ -27,7 +27,7 @@
       </template>
 
       <template v-slot:body-cell-actions="props">
-        <q-td :props="props">
+        <q-td :props="props" @click.stop>
           <row-actions :resourceName="resourceName" :item="props.row"></row-actions>
         </q-td>
       </template>
