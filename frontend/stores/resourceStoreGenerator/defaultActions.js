@@ -98,6 +98,11 @@ export default function defaultActions ({ endpoints, defaultRecord, resourceName
       return data
     }),
 
+    // Fetch one record without touching the store's record or form state
+    fetchOne: async function (id) {
+      return await endpoints.show(id)
+    },
+
     show: withLoading(async function (id) {
       if (Object.keys(this.datatableOptions.columns).length === 0) {
         await this.getDatatableOptions()
