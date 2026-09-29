@@ -114,6 +114,10 @@ export default function defaultActions ({ endpoints, defaultRecord, resourceName
     }),
 
     edit: withLoading(async function ({ id, attributes }) {
+      if (Object.keys(this.datatableOptions.columns).length === 0) {
+        await this.getDatatableOptions()
+      }
+
       const response = await endpoints.edit({ id, attributes })
 
       this.record = response.model

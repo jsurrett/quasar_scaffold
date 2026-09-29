@@ -122,7 +122,11 @@ export default {
     }
 
     onMounted(async () => {
-      if (!resource.datatableOptions.modelName) {
+      const belongsToChanged =
+        effectiveBelongsTo.value?.id !== resource.belongsTo?.id ||
+        effectiveBelongsTo.value?.name !== resource.belongsTo?.name
+
+      if (!resource.datatableOptions.modelName || belongsToChanged) {
         dataTableNeededIdNameMappings[props.resourceName] && await dataTableNeededIdNameMappings[props.resourceName]()
         await resource.load({ pagination: resource.pagination, belongsTo: effectiveBelongsTo.value, isNested: effectiveIsNested.value })
       }
