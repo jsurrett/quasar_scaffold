@@ -23,7 +23,10 @@ export default {
         const [key, value] = field
 
         if (selectOptionColumns.includes(key)) {
-          newRecord[key] = selectOptions[key][value]
+          // Response keys are camelized, so an option key like fixed_amount arrives as
+          // fixedAmount while the record value is still fixed_amount
+          const options = selectOptions[key]
+          newRecord[key] = options[value] ?? (typeof value === 'string' ? options[camelize(value)] : undefined)
         } else {
           newRecord[key] = value
         }
